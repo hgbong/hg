@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 4
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    username: postgres
+    password: "dlatl#00"
+    platform: postgres
