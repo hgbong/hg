@@ -7,6 +7,14 @@ spring:
     password: "dlatl#00"
     platform: postgres
 
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob.non_contextual_creation: true
+        ddl-auto: update
+    generate-ddl: true
+    show-sql: true
   mvc:
     pathmatch:
       # TODO 아래 설정 용도 확인

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "user_info")
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
+public class User {
 
     @Id
     @Column(name = "user_id")

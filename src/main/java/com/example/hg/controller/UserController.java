@@ -1,8 +1,8 @@
 package com.example.hg.controller;
 
-import com.example.hg.model.user.UserCreateRequest;
-import com.example.hg.model.user.UserResponse;
-import com.example.hg.model.user.UsersResponse;
+import com.example.hg.model.user.UserCreateRequestDto;
+import com.example.hg.model.user.UserResponseDto;
+import com.example.hg.model.user.UsersResponseDto;
 import com.example.hg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +17,17 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<UsersResponse> listUsers() {
+    public List<UsersResponseDto> listUsers() {
         return userService.listUsers();
     }
 
     @GetMapping("/{userId}")
-    public UserResponse detailUser(@PathVariable Long userId) {
+    public UserResponseDto detailUser(@PathVariable Long userId) {
         return userService.detailUser(userId);
     }
 
     @PostMapping
-    public UserResponse createUser(@RequestBody UserCreateRequest request) {
+    public UserResponseDto createUser(@RequestBody UserCreateRequestDto request) {
         return userService.createUser(request);
     }
 }

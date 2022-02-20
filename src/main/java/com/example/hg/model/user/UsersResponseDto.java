@@ -1,10 +1,14 @@
 package com.example.hg.model.user;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCreateRequest {
+@Builder
+public class UsersResponseDto {
+    private Long userId;
+
     private String userName;
 }

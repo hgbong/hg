@@ -1,8 +1,9 @@
 package com.example.hg.service;
 
-import com.example.hg.model.user.UserCreateRequest;
-import com.example.hg.model.user.UserResponse;
-import com.example.hg.model.user.UsersResponse;
+import com.example.hg.model.user.User;
+import com.example.hg.model.user.UserCreateRequestDto;
+import com.example.hg.model.user.UserResponseDto;
+import com.example.hg.model.user.UsersResponseDto;
 import com.example.hg.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,43 +19,47 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public List<UsersResponse> listUsers() {
-        List<UsersResponse> result = new ArrayList<>();
+    public List<UsersResponseDto> listUsers() {
+        List<UsersResponseDto> result = new ArrayList<>();
 
-        Iterable<UserResponse> users = userRepository.findAll();
-        for (UserResponse u : users) {
-            result.add(UsersResponse.builder()
-                    .userId(u.getUserId())
-                    .userName(u.getUserName())
-                    .build());
-        }
+        Iterable<User> users = userRepository.findAll();
+        users.forEach(u -> {
+            result.add(UsersResponseDto.builder()
+            .userId(u.getUserId()).userName(u.getUserName()).build());
+        });
 
         return result;
     }
 
 
-    public UserResponse detailUser(Long userId) {
-        Optional<UserResponse> xx = userRepository.findById(userId);
-        if (xx.isPresent()) {
-            return xx.get();
+    public UserResponseDto detailUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            User u = user.get();
+            return UserResponseDto.builder()
+                    .userId(u.getUserId())
+                    .userName(u.getUserName())
+                    .build();
         } else {
             // TODO: exception 404
             return null;
         }
     }
 
-    public UserResponse createUser(UserCreateRequest request) {
-
+    public UserResponseDto createUser(UserCreateRequestDto request) {
         String userName = request.getUserName();
 
         // TODO: validation
 
 
-        UserResponse result = userRepository.save(UserResponse.builder().userName(request.getUserName()).build());
+        User u = userRepository.save(User.builder().userName(request.getUserName()).build());
 
         // TODO: log
 
-        return result;
+        return UserResponseDto.builder()
+                .userId(u.getUserId())
+                .userName(u.getUserName())
+                .build();
     }
 
 }
