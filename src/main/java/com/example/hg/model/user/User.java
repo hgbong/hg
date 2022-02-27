@@ -1,7 +1,6 @@
 package com.example.hg.model.user;
 
 import lombok.*;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 
@@ -9,7 +8,7 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Entity
-@Table(name = "user_info")
+@Table(name = "iam_user")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {

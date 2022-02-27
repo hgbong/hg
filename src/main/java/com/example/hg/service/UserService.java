@@ -25,7 +25,7 @@ public class UserService {
         Iterable<User> users = userRepository.findAll();
         users.forEach(u -> {
             result.add(UsersResponseDto.builder()
-            .userId(u.getUserId()).userName(u.getUserName()).build());
+                    .userId(u.getUserId()).userName(u.getUserName()).build());
         });
 
         return result;
