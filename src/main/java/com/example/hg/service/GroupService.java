@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GroupService {
@@ -33,30 +32,20 @@ public class GroupService {
 
 
     public GroupResponseDto detailGroup(Long groupId) {
-        Optional<Group> group = groupRepository.findById(groupId);
-        if (group.isPresent()) {
-            Group g = group.get();
-            return GroupResponseDto.builder()
-                    .groupId(g.getGroupId())
-                    .groupName(g.getGroupName())
-                    .build();
-        } else {
-            // TODO: exception 404
-            return null;
-        }
+        // TODO 404
+        Group g = groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("group not found"));
+        return GroupResponseDto.builder()
+                .groupId(g.getGroupId())
+                .groupName(g.getGroupName())
+                .build();
     }
 
     public GroupResponseDto createGroup(GroupCreateRequestDto request) {
+        // TODO: validation
         String groupName = request.getGroupName();
 
-        // TODO: validation
-
-
-        Group g = groupRepository.save(Group.builder().groupName(request.getGroupName()).build());
-
         // TODO: log
-
-
+        Group g = groupRepository.save(Group.builder().groupName(request.getGroupName()).build());
         return GroupResponseDto.builder()
                 .groupId(g.getGroupId())
                 .groupName(g.getGroupName())

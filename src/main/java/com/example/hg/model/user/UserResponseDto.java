@@ -1,18 +1,19 @@
 package com.example.hg.model.user;
 
 import lombok.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDto {
+public class UserResponseDto extends UsersResponseDto {
+    private String iodid;
 
-    private Long userId;
-
-    private String userName;
+    public static UserResponseDto convertUserResponseDto(User u) {
+        UserResponseDto user = new UserResponseDto();
+        user.setUserId(u.getUserId());
+        user.setUserName(u.getUserName());
+        return user;
+    }
 }

@@ -1,22 +1,23 @@
 package com.example.hg.service;
 
-import com.example.hg.model.user.User;
-import com.example.hg.model.user.UserCreateRequestDto;
-import com.example.hg.model.user.UserResponseDto;
-import com.example.hg.model.user.UsersResponseDto;
+import com.example.hg.model.group.Group;
+import com.example.hg.model.user.*;
+import com.example.hg.repository.GroupRepository;
 import com.example.hg.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GroupRepository groupRepository;
 
 
     public List<UsersResponseDto> listUsers() {
@@ -33,22 +34,13 @@ public class UserService {
 
 
     public UserResponseDto detailUser(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            User u = user.get();
-            return UserResponseDto.builder()
-                    .userId(u.getUserId())
-                    .userName(u.getUserName())
-                    .build();
-        } else {
-            // TODO: exception 404
-            return null;
-        }
+        // TODO 404
+        User u = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("user not found"));
+        return UserResponseDto.convertUserResponseDto(u);
     }
 
     public UserResponseDto createUser(UserCreateRequestDto request) {
         String userName = request.getUserName();
-
         // TODO: validation
 
 
@@ -56,10 +48,15 @@ public class UserService {
 
         // TODO: log
 
-        return UserResponseDto.builder()
-                .userId(u.getUserId())
-                .userName(u.getUserName())
-                .build();
+        return UserResponseDto.convertUserResponseDto(u);
     }
 
+    public UserResponseDto updateUser(UserUpdateRequestDto request) {
+        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("user not found"));
+        Group group = groupRepository.findById(request.getGroupId()).orElseThrow(() -> new RuntimeException("group not found"));
+
+        user.setGroup(group);
+
+        return UserResponseDto.convertUserResponseDto(user);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.hg.model.user;
 
+import com.example.hg.model.group.Group;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,4 +21,8 @@ public class User {
 
     @Column(name = "user_name")
     private String userName;
+
+    @ManyToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
 }
