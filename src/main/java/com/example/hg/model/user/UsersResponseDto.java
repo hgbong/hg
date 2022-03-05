@@ -9,7 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 public class UsersResponseDto {
     private Long userId;
-
     private String userName;
 
     public static UsersResponseDto convertUsersResponseDto(User u) {
