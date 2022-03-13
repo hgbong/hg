@@ -2,7 +2,10 @@ package com.example.hg.service;
 
 import com.example.hg.model.group.Group;
 import com.example.hg.model.user.*;
+import com.example.hg.model.usergroup.UserGroup;
+import com.example.hg.model.usergroup.UserGroupAddRequestDto;
 import com.example.hg.repository.GroupRepository;
+import com.example.hg.repository.UserGroupRepository;
 import com.example.hg.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,9 @@ public class UserService {
 
     @Autowired
     private GroupRepository groupRepository;
+
+    @Autowired
+    private UserGroupRepository userGroupRepository;
 
 
     public List<UsersResponseDto> listUsers() {
@@ -36,7 +42,7 @@ public class UserService {
     public UserResponseDto detailUser(Long userId) {
         // TODO 404
         User u = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("user not found"));
-        return UserResponseDto.convertUserResponseDto(u);
+        return new UserResponseDto().convertUserResponseDto(u);
     }
 
     public UserResponseDto createUser(UserCreateRequestDto request) {
@@ -48,15 +54,20 @@ public class UserService {
 
         // TODO: log
 
-        return UserResponseDto.convertUserResponseDto(u);
+        return new UserResponseDto().convertUserResponseDto(u);
     }
 
     public UserResponseDto updateUser(UserUpdateRequestDto request) {
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("user not found"));
         Group group = groupRepository.findById(request.getGroupId()).orElseThrow(() -> new RuntimeException("group not found"));
 
-        user.setGroup(group);
+        // TODO 그외 샤용자 업데이트 시 업데이트할 정보들 있으면 추가
 
-        return UserResponseDto.convertUserResponseDto(user);
+        userGroupRepository.save(UserGroup.builder().user(user).group(group).build());
+        return new UserResponseDto().convertUserResponseDto(user);
+    }
+
+    public UserResponseDto addGroupToUser(UserGroupAddRequestDto request) {
+        return null;
     }
 }

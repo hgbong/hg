@@ -1,8 +1,10 @@
 package com.example.hg.model.group;
 
+import com.example.hg.model.usergroup.UserGroup;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +22,8 @@ public class Group {
 
     @Column(name = "group_name")
     private String groupName;
+
+    @OneToMany(mappedBy = "group")
+    private List<UserGroup> userGroups;
+
 }
