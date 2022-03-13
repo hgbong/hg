@@ -40,7 +40,7 @@ public class UserService {
 
 
     public UserResponseDto detailUser(Long userId) {
-        // TODO 404
+        // TODO exception 생성 및 global exception handler 처리
         User u = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("user not found"));
         return new UserResponseDto().convertUserResponseDto(u);
     }
@@ -61,7 +61,7 @@ public class UserService {
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("user not found"));
         Group group = groupRepository.findById(request.getGroupId()).orElseThrow(() -> new RuntimeException("group not found"));
 
-        // TODO 그외 샤용자 업데이트 시 업데이트할 정보들 있으면 추가
+        // TODO 그외 사용자 업데이트 시 업데이트할 정보들 있으면 추가
 
         userGroupRepository.save(UserGroup.builder().user(user).group(group).build());
         return new UserResponseDto().convertUserResponseDto(user);
