@@ -32,7 +32,7 @@ public class GroupService {
 
 
     public GroupResponseDto detailGroup(Long groupId) {
-        // TODO 404
+        // TODO exception 생성 및 global exception handler 처리
         Group g = groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("group not found"));
         return GroupResponseDto.builder()
                 .groupId(g.getGroupId())

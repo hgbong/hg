@@ -14,9 +14,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.transaction.Transactional;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -30,12 +33,9 @@ public class UserControllerTest {
 
     @Test
     public void createUserTest() throws Exception {
-
-        // TODO transaction rollback 처리하기
-
         ObjectMapper mapper = new ObjectMapper();
         UserCreateRequestDto req = new UserCreateRequestDto();
-        req.setUserName("user1");
+        req.setUserName("username");
         String json = mapper.writeValueAsString(req);
 
         mockMvc.perform(MockMvcRequestBuilders
