@@ -27,6 +27,7 @@ public class UserResponseDto extends UsersResponseDto {
         UserResponseDto user = new UserResponseDto();
         user.setUserId(u.getUserId());
         user.setUserName(u.getUserName());
+        user.setUserEmail(u.getUserEmail());
 
         List<GroupsResponseDto> groups = new ArrayList<>();
         if (u.getUserGroups() != null) {

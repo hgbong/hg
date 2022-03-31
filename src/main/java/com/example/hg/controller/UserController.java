@@ -1,26 +1,25 @@
 package com.example.hg.controller;
 
-import com.example.hg.model.user.UserCreateRequestDto;
-import com.example.hg.model.user.UserResponseDto;
-import com.example.hg.model.user.UserUpdateRequestDto;
-import com.example.hg.model.user.UsersResponseDto;
+import com.example.hg.model.user.*;
 import com.example.hg.model.usergroup.UserGroupAddRequestDto;
 import com.example.hg.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired // TODO final 필드로 정의 및 RequiredArgsConstructor로 참조
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
-    public List<UsersResponseDto> listUsers() {
-        return userService.listUsers();
+    public List<UsersResponseDto> listUsers(@ModelAttribute UserSearchCriteria searchCriteria, Pageable pageable) {
+        return userService.listUsers(searchCriteria, pageable);
     }
 
     @GetMapping("/{userId}")

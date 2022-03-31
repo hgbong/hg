@@ -4,6 +4,7 @@ import com.example.hg.model.group.GroupCreateRequestDto;
 import com.example.hg.model.group.GroupResponseDto;
 import com.example.hg.model.group.GroupsResponseDto;
 import com.example.hg.service.GroupService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/groups")
+@RequiredArgsConstructor
 public class GroupController {
 
-    @Autowired
-    private GroupService groupService;
+    private final GroupService groupService;
+
 
     @GetMapping
     public List<GroupsResponseDto> listGroups() {
