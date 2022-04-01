@@ -7,16 +7,23 @@ import com.example.hg.model.usergroup.UserGroupAddRequestDto;
 import com.example.hg.repository.GroupRepository;
 import com.example.hg.repository.UserGroupRepository;
 import com.example.hg.repository.UserRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +34,8 @@ public class UserService {
     private final GroupRepository groupRepository;
 
     private final UserGroupRepository userGroupRepository;
+
+    private final JPAQueryFactory jpaQueryFactory;
 
     @PostConstruct
     public void init() {
@@ -39,18 +48,44 @@ public class UserService {
 
 
     public List<UsersResponseDto> listUsers(UserSearchCriteria searchCriteria, Pageable pageable) {
-        List<UsersResponseDto> result = new ArrayList<>();
+        QUser u = new QUser("u");
 
-        // FIXME 검색조건이 입력된 경우에만 쿼리 조건문 생성 (e.g. query param으로 userName=test 이 입력되었을 때 userName으로만 조건 검색)
-        // List<User> xxx = userRepository.findByUserNameContainsAndUserEmailContains(searchCriteria.getUserName(), searchCriteria.getUserEmail(), pageable);
+        // TODO 동적으로 search criteria 체크할 수는 없을지
+        BooleanBuilder builder = new BooleanBuilder();
+        if (StringUtils.isNotBlank(searchCriteria.getUserName())) {
+            builder.and(u.userName.contains(searchCriteria.getUserName()));
+        }
 
-        Page<User> users = userRepository.findAll(pageable);
-        users.forEach(u -> {
-            result.add(UsersResponseDto.builder()
-                    .userId(u.getUserId()).userName(u.getUserName()).build());
+        if (StringUtils.isNotBlank(searchCriteria.getUserEmail())) {
+            builder.and(u.userEmail.contains(searchCriteria.getUserEmail()));
+        }
+
+        // TODO pageable로부터 querydsl 정렬 객체 OrderSpecifier 생성
+        // CONSIDER pageable 대신 page, size, sort 객체를 별도로 받을지
+        List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
+        pageable.getSort().forEach(sort -> {
+            Order order = sort.getDirection().equals(Sort.Direction.ASC) ? Order.ASC : Order.DESC;
+            Expression expression = Expressions.path(User.class, sort.getProperty()); // sort.getProperty expects userName, userEmail
+            OrderSpecifier orderSpecifier = new OrderSpecifier(order, expression);
+            orderSpecifiers.add(orderSpecifier);
         });
 
-        return result;
+        List<User> users = jpaQueryFactory
+                .selectFrom(u)
+                .where(builder)
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
+                .fetch();
+
+        List<UsersResponseDto> result = new ArrayList<>();
+        return users.stream().map(user ->
+                UsersResponseDto.builder()
+                        .userId(user.getUserId())
+                        .userName(user.getUserName())
+                        .userEmail(user.getUserEmail())
+                        .build())
+                .collect(Collectors.toList());
     }
 
 
