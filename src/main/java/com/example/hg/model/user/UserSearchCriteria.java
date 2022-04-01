@@ -11,9 +11,9 @@ import lombok.Setter;
 @Setter
 public class UserSearchCriteria {
 
-    @ApiParam(value = "userName", example = "영수")
+    @ApiParam(value = "사용자이름", example = "username")
     private String userName;
 
-    @ApiParam(value = "userEmail", example = "test@gmail.com")
+    @ApiParam(value = "사용자이메일", example = "test@gmail.com")
     private String userEmail;
 }

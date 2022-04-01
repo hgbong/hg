@@ -14,6 +14,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +22,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -78,7 +81,6 @@ public class UserService {
                 .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                 .fetch();
 
-        List<UsersResponseDto> result = new ArrayList<>();
         return users.stream().map(user ->
                 UsersResponseDto.builder()
                         .userId(user.getUserId())
@@ -97,10 +99,14 @@ public class UserService {
 
     public UserResponseDto createUser(UserCreateRequestDto request) {
         String userName = request.getUserName();
+        String userEmail = request.getUserEmail();
         // TODO: validation
 
 
-        User u = userRepository.save(User.builder().userName(request.getUserName()).build());
+        User u = userRepository.save(User.builder()
+                .userName(request.getUserName())
+                .userEmail(request.getUserEmail())
+                .build());
 
         // TODO: log
 
@@ -109,15 +115,35 @@ public class UserService {
 
     public UserResponseDto updateUser(UserUpdateRequestDto request) {
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("user not found"));
-        Group group = groupRepository.findById(request.getGroupId()).orElseThrow(() -> new RuntimeException("group not found"));
 
         // TODO 그외 사용자 업데이트 시 업데이트할 정보들 있으면 추가
 
-        userGroupRepository.save(UserGroup.builder().user(user).group(group).build());
+        user.setUserName(request.getUserName());
+        user.setUserEmail(request.getUserEmail());
+
+        if (request.getGroupIds() != null) {
+            // 요청에 대상 그룹이 지정되어 있으면 그룹 목록을 수정, null이면 그룹을 변경하지 않는 것으로 판단
+            List<Group> targetGroups = request.getGroupIds().stream().map(groupId ->
+                    groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("group not found"))
+            ).collect(Collectors.toList());
+
+            user.setUserGroups(null);
+            targetGroups.forEach(group ->
+                    userGroupRepository.save(UserGroup.builder()
+                            .user(user)
+                            .group(group)
+                            .build()));
+        }
+
         return new UserResponseDto().convertUserResponseDto(user);
     }
 
     public UserResponseDto addGroupToUser(UserGroupAddRequestDto request) {
         return null;
+    }
+
+    public void deleteUser(Long userId) {
+        userGroupRepository.deleteUserAllGroups(userId);
+        userRepository.deleteById(userId);
     }
 }

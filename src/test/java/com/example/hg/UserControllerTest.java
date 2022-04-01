@@ -2,8 +2,12 @@ package com.example.hg;
 
 import com.example.hg.model.user.User;
 import com.example.hg.model.user.UserCreateRequestDto;
+import com.example.hg.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +32,25 @@ import java.util.List;
 @AutoConfigureMockMvc
 @Transactional
 public class UserControllerTest {
+
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
+
+    @Autowired
+    private UserService userService;
+
+    @PostConstruct
+    public void init() {
+        userService.createUser(UserCreateRequestDto.builder().userName("_testuser1").userEmail("_test1@gmail.com").build());
+        userService.createUser(UserCreateRequestDto.builder().userName("_testuser2").userEmail("_test2@gmail.com").build());
+        userService.createUser(UserCreateRequestDto.builder().userName("_testuser3").userEmail("_test3@gmail.com").build());
+        userService.createUser(UserCreateRequestDto.builder().userName("_testuser4").userEmail("_test4@gmail.com").build());
+        userService.createUser(UserCreateRequestDto.builder().userName("_testuser5").userEmail("_test5@gmail.com").build());
+    }
+
 
     @Test
     public void getUsersTest() throws Exception {
-
-        /*
-        List<Sort.Order> order = new ArrayList<>();
-        order.add(new Sort.Order(Sort.Direction.DESC, "userId"));
-        order.add(new Sort.Order(Sort.Direction.ASC, "userEmail"));
-        Sort sort = Sort.by(order);
-        Page<User> list = userRepository.findAll(PageRequest.of(0, 100, sort));
-        */
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users").accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk())
@@ -51,6 +62,7 @@ public class UserControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         UserCreateRequestDto req = new UserCreateRequestDto();
         req.setUserName("username");
+        req.setUserEmail("_test@gmail.com");
         String json = mapper.writeValueAsString(req);
 
         mockMvc.perform(MockMvcRequestBuilders

@@ -4,19 +4,30 @@ import com.example.hg.model.group.Group;
 import com.example.hg.model.group.GroupCreateRequestDto;
 import com.example.hg.model.group.GroupResponseDto;
 import com.example.hg.model.group.GroupsResponseDto;
+import com.example.hg.model.user.User;
 import com.example.hg.repository.GroupRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class GroupService {
 
-    @Autowired
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
 
+    @PostConstruct
+    public void init() {
+        groupRepository.save(Group.builder().groupName("group1").build());
+        groupRepository.save(Group.builder().groupName("group2").build());
+        groupRepository.save(Group.builder().groupName("group3").build());
+    }
 
     public List<GroupsResponseDto> listGroups() {
         List<GroupsResponseDto> result = new ArrayList<>();

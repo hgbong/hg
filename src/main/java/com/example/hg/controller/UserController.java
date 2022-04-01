@@ -38,6 +38,11 @@ public class UserController {
         return userService.updateUser(request);
     }
 
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+    }
+
     @PostMapping("/{userId}/groups")
     @Deprecated(since = "not implemented spec yet (TODO)")
     public UserResponseDto addGroupToUser(@PathVariable Long userId, @RequestBody UserGroupAddRequestDto request) {
