@@ -1,6 +1,7 @@
 package com.example.hg.service;
 
 import com.example.hg.model.group.Group;
+import com.example.hg.model.group.GroupsResponseDto;
 import com.example.hg.model.user.*;
 import com.example.hg.model.usergroup.UserGroup;
 import com.example.hg.model.usergroup.UserGroupAddRequestDto;
@@ -72,20 +73,20 @@ public class UserService {
         });
 
         List<User> users = jpaQueryFactory
-                .selectFrom(u)
-                .where(builder)
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
-                .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
-                .fetch();
+            .selectFrom(u)
+            .where(builder)
+            .limit(pageable.getPageSize())
+            .offset(pageable.getOffset())
+            .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
+            .fetch();
 
         return users.stream().map(user ->
                 UsersResponseDto.builder()
-                        .userId(user.getUserId())
-                        .userName(user.getUserName())
-                        .userEmail(user.getUserEmail())
-                        .build())
-                .collect(Collectors.toList());
+                    .userId(user.getUserId())
+                    .userName(user.getUserName())
+                    .userEmail(user.getUserEmail())
+                    .build())
+            .collect(Collectors.toList());
     }
 
 
@@ -102,9 +103,9 @@ public class UserService {
 
 
         User u = userRepository.save(User.builder()
-                .userName(request.getUserName())
-                .userEmail(request.getUserEmail())
-                .build());
+            .userName(request.getUserName())
+            .userEmail(request.getUserEmail())
+            .build());
 
         // TODO: log
 
@@ -122,7 +123,7 @@ public class UserService {
         if (request.getGroupIds() != null) {
             // 요청에 대상 그룹이 지정되어 있으면 그룹 목록을 수정, null이면 그룹을 변경하지 않는 것으로 판단
             List<Group> targetGroups = request.getGroupIds().stream().map(groupId ->
-                    groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("group not found"))
+                groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("group not found"))
             ).collect(Collectors.toList());
 
             // 기존 그룹 초기화
@@ -148,5 +149,13 @@ public class UserService {
     public void deleteUser(Long userId) {
         userGroupRepository.deleteUserAllGroups(userId);
         userRepository.deleteById(userId);
+    }
+
+    public List<GroupsResponseDto> listAllUserGroups(Long userId) {
+        // join jpql 사용해서 사용자 그룹 목록 조회
+        List<Group> groups = userRepository.findAllGroupsByUserId(userId);
+        return groups.stream().map(group -> GroupsResponseDto
+            .builder().groupId(group.getGroupId()).groupName(group.getGroupName()).build())
+            .collect(Collectors.toList());
     }
 }

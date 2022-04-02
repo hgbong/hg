@@ -1,10 +1,10 @@
 package com.example.hg.controller;
 
+import com.example.hg.model.group.GroupsResponseDto;
 import com.example.hg.model.user.*;
 import com.example.hg.model.usergroup.UserGroupAddRequestDto;
 import com.example.hg.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +41,11 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
+    }
+
+    @GetMapping("/{userId}/groups")
+    public List<GroupsResponseDto> listAllUserGroups(@PathVariable Long userId) {
+        return userService.listAllUserGroups(userId);
     }
 
     @PostMapping("/{userId}/groups")

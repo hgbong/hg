@@ -4,10 +4,8 @@ import com.example.hg.model.group.Group;
 import com.example.hg.model.group.GroupCreateRequestDto;
 import com.example.hg.model.group.GroupResponseDto;
 import com.example.hg.model.group.GroupsResponseDto;
-import com.example.hg.model.user.User;
 import com.example.hg.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -35,7 +33,7 @@ public class GroupService {
         Iterable<Group> groups = groupRepository.findAll();
         groups.forEach(g -> {
             result.add(GroupsResponseDto.builder()
-                    .groupId(g.getGroupId()).groupName(g.getGroupName()).build());
+                .groupId(g.getGroupId()).groupName(g.getGroupName()).build());
         });
 
         return result;
@@ -46,9 +44,9 @@ public class GroupService {
         // TODO exception 생성 및 global exception handler 처리
         Group g = groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("group not found"));
         return GroupResponseDto.builder()
-                .groupId(g.getGroupId())
-                .groupName(g.getGroupName())
-                .build();
+            .groupId(g.getGroupId())
+            .groupName(g.getGroupName())
+            .build();
     }
 
     public GroupResponseDto createGroup(GroupCreateRequestDto request) {
@@ -58,9 +56,9 @@ public class GroupService {
         // TODO: log
         Group g = groupRepository.save(Group.builder().groupName(request.getGroupName()).build());
         return GroupResponseDto.builder()
-                .groupId(g.getGroupId())
-                .groupName(g.getGroupName())
-                .build();
+            .groupId(g.getGroupId())
+            .groupName(g.getGroupName())
+            .build();
     }
 
 }

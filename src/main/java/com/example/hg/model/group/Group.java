@@ -23,7 +23,7 @@ public class Group {
     @Column(name = "group_name")
     private String groupName;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private List<UserGroup> userGroups;
 
 }

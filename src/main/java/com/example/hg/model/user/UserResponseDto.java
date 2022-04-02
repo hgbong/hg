@@ -34,9 +34,9 @@ public class UserResponseDto extends UsersResponseDto {
             u.getUserGroups().forEach(ug -> {
                 Group g = groupRepository.findById(ug.getGroup().getGroupId()).orElseThrow(() -> new RuntimeException("group not found"));
                 groups.add(GroupsResponseDto.builder()
-                        .groupId(g.getGroupId())
-                        .groupName(g.getGroupName())
-                        .build());
+                    .groupId(g.getGroupId())
+                    .groupName(g.getGroupName())
+                    .build());
             });
             user.setGroups(groups);
         }

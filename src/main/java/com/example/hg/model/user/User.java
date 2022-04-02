@@ -26,7 +26,7 @@ public class User {
     @Column(name = "user_email")
     private String userEmail;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserGroup> userGroups;
 
 }
