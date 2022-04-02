@@ -14,9 +14,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -127,12 +125,17 @@ public class UserService {
                     groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("group not found"))
             ).collect(Collectors.toList());
 
+            // 기존 그룹 초기화
             user.setUserGroups(null);
-            targetGroups.forEach(group ->
-                    userGroupRepository.save(UserGroup.builder()
-                            .user(user)
-                            .group(group)
-                            .build()));
+
+            // 요청들어온 그룹으로 목록 수정
+            targetGroups.forEach(group -> {
+                UserGroup userGroup = new UserGroup();
+                userGroup.setUser(user);
+                userGroup.setGroup(group);
+                userGroupRepository.save(userGroup);
+            });
+
         }
 
         return new UserResponseDto().convertUserResponseDto(user);
