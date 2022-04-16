@@ -2,6 +2,7 @@ package com.example.hg.service;
 
 import com.example.hg.model.group.Group;
 import com.example.hg.model.group.GroupsResponseDto;
+import com.example.hg.model.security.Role;
 import com.example.hg.model.user.*;
 import com.example.hg.model.usergroup.UserGroup;
 import com.example.hg.model.usergroup.UserGroupAddRequestDto;
@@ -41,11 +42,11 @@ public class UserService {
 
     @PostConstruct
     public void init() {
-        userRepository.save(User.builder().userName("name1").userEmail("test1@gmail.com").build());
-        userRepository.save(User.builder().userName("name2").userEmail("test2@gmail.com").build());
-        userRepository.save(User.builder().userName("name3").userEmail("test3@gmail.com").build());
-        userRepository.save(User.builder().userName("name4").userEmail("test4@gmail.com").build());
-        userRepository.save(User.builder().userName("name5").userEmail("test5@gmail.com").build());
+        userRepository.save(User.builder().userName("name1").userEmail("test1@gmail.com").role(Role.USER).build());
+        userRepository.save(User.builder().userName("name2").userEmail("test2@gmail.com").role(Role.USER).build());
+        userRepository.save(User.builder().userName("name3").userEmail("test3@gmail.com").role(Role.USER).build());
+        userRepository.save(User.builder().userName("name4").userEmail("test4@gmail.com").role(Role.USER).build());
+        userRepository.save(User.builder().userName("name5").userEmail("test5@gmail.com").role(Role.USER).build());
     }
 
 
@@ -81,11 +82,11 @@ public class UserService {
             .fetch();
 
         return users.stream().map(user ->
-                UsersResponseDto.builder()
-                    .userId(user.getUserId())
-                    .userName(user.getUserName())
-                    .userEmail(user.getUserEmail())
-                    .build())
+            UsersResponseDto.builder()
+                .userId(user.getUserId())
+                .userName(user.getUserName())
+                .userEmail(user.getUserEmail())
+                .build())
             .collect(Collectors.toList());
     }
 
