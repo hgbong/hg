@@ -2,6 +2,8 @@ server:
   port: 8081
 
 spring:
+  profiles:
+    include: oauth
   datasource:
     hikari:
       maximum-pool-size: 4
@@ -10,14 +12,22 @@ spring:
     password: "dlatl#00"
     platform: postgres
 
+
   jpa:
+    # generated-ddl not working? : "There is also a spring.jpa.generate-ddl flag, but it is not used if Hibernate autoconfig is active because the ddl-auto settings are more fine-grained."
+    # https://stackoverflow.com/questions/26881739/unable-to-get-spring-boot-to-automatically-create-database-schema
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQL10Dialect
+      ddl-auto: create
+      # naming_strategy: TODO
+      jdbc:
+        lob.non_contextual_creation: true
     properties:
       hibernate:
-        jdbc:
-          lob.non_contextual_creation: true
-        ddl-auto: update
-    generate-ddl: true
-    show-sql: true
+        format_sql: false # SQL beautify
+
   mvc:
     pathmatch:
       # TODO 아래 설정 용도 확인

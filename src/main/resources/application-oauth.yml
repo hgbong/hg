@@ -1,0 +1,12 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 182164507246-qku5hq69mca5otq0ccv6c4p0fm786evp.apps.googleusercontent.com
+            client-secret: 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
+            # scope에 openid 설정 시 open id provider로 인식하기 때문에, google을 제외한 프로바이더에 대해 별도로 Oauth2 인증 서비스를 만들어야 함
+            scope: email,profile # default scope = email,profile,openid
+          #kakao:
+          #naver:

@@ -1,26 +1,25 @@
 package com.example.hg.controller;
 
-import com.example.hg.model.user.UserCreateRequestDto;
-import com.example.hg.model.user.UserResponseDto;
-import com.example.hg.model.user.UserUpdateRequestDto;
-import com.example.hg.model.user.UsersResponseDto;
+import com.example.hg.model.group.GroupsResponseDto;
+import com.example.hg.model.user.*;
 import com.example.hg.model.usergroup.UserGroupAddRequestDto;
 import com.example.hg.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired // TODO final 필드로 정의 및 RequiredArgsConstructor로 참조
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
-    public List<UsersResponseDto> listUsers() {
-        return userService.listUsers();
+    public List<UsersResponseDto> listUsers(@ModelAttribute UserSearchCriteria searchCriteria, Pageable pageable) {
+        return userService.listUsers(searchCriteria, pageable);
     }
 
     @GetMapping("/{userId}")
@@ -37,6 +36,16 @@ public class UserController {
     public UserResponseDto updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequestDto request) {
         request.setUserId(userId);
         return userService.updateUser(request);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+    }
+
+    @GetMapping("/{userId}/groups")
+    public List<GroupsResponseDto> listAllUserGroups(@PathVariable Long userId) {
+        return userService.listAllUserGroups(userId);
     }
 
     @PostMapping("/{userId}/groups")

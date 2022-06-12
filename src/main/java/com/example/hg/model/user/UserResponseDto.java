@@ -27,15 +27,16 @@ public class UserResponseDto extends UsersResponseDto {
         UserResponseDto user = new UserResponseDto();
         user.setUserId(u.getUserId());
         user.setUserName(u.getUserName());
+        user.setUserEmail(u.getUserEmail());
 
         List<GroupsResponseDto> groups = new ArrayList<>();
         if (u.getUserGroups() != null) {
             u.getUserGroups().forEach(ug -> {
                 Group g = groupRepository.findById(ug.getGroup().getGroupId()).orElseThrow(() -> new RuntimeException("group not found"));
                 groups.add(GroupsResponseDto.builder()
-                        .groupId(g.getGroupId())
-                        .groupName(g.getGroupName())
-                        .build());
+                    .groupId(g.getGroupId())
+                    .groupName(g.getGroupName())
+                    .build());
             });
             user.setGroups(groups);
         }

@@ -20,13 +20,13 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .consumes(getConsumeContentTypes())
-                .produces(getProduceContentTypes())
-                .apiInfo(getApiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.hg.controller"))
-                .paths(PathSelectors.ant("/**")) // TODO 어떤 용도?
-                .build();
+            .consumes(getConsumeContentTypes())
+            .produces(getProduceContentTypes())
+            .apiInfo(getApiInfo())
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("com.example.hg.controller"))
+            .paths(PathSelectors.ant("/**")) // TODO 어떤 용도?
+            .build();
     }
 
     private Set<String> getConsumeContentTypes() {
@@ -44,10 +44,10 @@ public class SwaggerConfig {
 
     private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
-                .title("API")
-                .description("swagger description")
-                .contact(new Contact("hgbong", "no url.", "bhg5460@gmail.com"))
-                .version("1.0")
-                .build();
+            .title("API")
+            .description("swagger description")
+            .contact(new Contact("hgbong", "no url.", "bhg5460@gmail.com"))
+            .version("1.0")
+            .build();
     }
 }

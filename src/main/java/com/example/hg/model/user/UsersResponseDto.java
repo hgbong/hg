@@ -10,6 +10,7 @@ import lombok.*;
 public class UsersResponseDto {
     private Long userId;
     private String userName;
+    private String userEmail;
 
     public UsersResponseDto convertUsersResponseDto(User u) {
         UsersResponseDto user = new UsersResponseDto();
