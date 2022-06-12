@@ -61,4 +61,9 @@ public class IndexController {
 
 
     }
+
+    @GetMapping("/auth/join")
+    public String join() {
+        return "join";
+    }
 }

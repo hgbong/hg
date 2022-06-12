@@ -39,13 +39,13 @@ public class User {
     // 따라서 EnumType.STRING 으로 지정하여, 명시적으로 값을 지정하여 입력
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    private Role role = Role.USER;
 
     @Column
     private String picture;
 
     public String getRoleKey() {
-        return this.role.getKey();
+        return role.getKey();
     }
 
     public User update(String name, String email, String picture) {

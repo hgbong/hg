@@ -1,0 +1,30 @@
+{{>layout/header}}
+
+<h3>회원가입</h3>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form action="/auth/join" method="post">
+            <div class="form-group">
+                <label for="userName">이름</label>
+                <input type="text" class="form-control" id="userName"
+                       placeholder="이름을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="userEmail">이메일</label>
+                <input type="text" class="form-control" id="userEmail"
+                       placeholder="이메일을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="content">비밀번호</label>
+                <input type="password" class="form-control" id="password"
+                       placeholder="비밀번호를 입력하세요">
+            </div>
+            <a href="/" role="button" class="btn btn-secondary">취소</a>
+            <input type="submit" class="btn bt n-primary" id="join-btn" value="가입">
+        </form>
+        <!--        <button type="button" class="btn bt n-primary" id="join-btn">등록</button>-->
+    </div>
+</div>
+
+{{>layout/footer}}
