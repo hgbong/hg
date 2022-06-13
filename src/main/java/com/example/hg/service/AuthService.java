@@ -1,5 +1,6 @@
 package com.example.hg.service;
 
+import com.example.hg.model.security.Role;
 import com.example.hg.model.user.User;
 import com.example.hg.model.user.UserJoinRequestDto;
 import com.example.hg.model.user.UserResponseDto;
@@ -18,7 +19,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    public UserResponseDto join(@Valid UserJoinRequestDto requestDto) {
+    public UserResponseDto join(UserJoinRequestDto requestDto) {
 
         Optional<User> xxx = userRepository.findByUserEmail(requestDto.getUserEmail());
 
@@ -26,7 +27,7 @@ public class AuthService {
             throw new RuntimeException("a user with the same email already exists");
         }
 
-        User user = User.builder().userName(requestDto.getUserName()).userEmail(requestDto.getUserEmail()).build();
+        User user = User.builder().userName(requestDto.getUserName()).userEmail(requestDto.getUserEmail()).role(Role.USER).build();
         userRepository.save(user);
 
         return new UserResponseDto().convertUserResponseDto(user);
