@@ -39,7 +39,7 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
-  # org.hibernate.SQL: trace  # parameter binding 정보까지 볼 수 있는 옵션 (필요에 따라 사용)
+  # org.hibernate.type: trace  # parameter binding 정보까지 볼 수 있는 옵션 (필요에 따라 사용)
 
 
 
