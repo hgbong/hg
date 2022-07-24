@@ -18,7 +18,7 @@ public class UserGroup {
 
     @Id
     @Column(name = "user_group_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long userGroupId;
 
     @ManyToOne(fetch = FetchType.LAZY)

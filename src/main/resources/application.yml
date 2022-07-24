@@ -7,28 +7,39 @@ spring:
   datasource:
     hikari:
       maximum-pool-size: 4
-    url: "jdbc:postgresql://localhost:5432/postgres"
-    username: postgres
-    password: "dlatl#00"
+    # url: "jdbc:postgresql://localhost:5432/postgres"
+    url: "jdbc:h2:tcp://localhost/~/test"
+    # username: postgres
+    # password: "dlatl#00"
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
     platform: postgres
 
 
   jpa:
     # generated-ddl not working? : "There is also a spring.jpa.generate-ddl flag, but it is not used if Hibernate autoconfig is active because the ddl-auto settings are more fine-grained."
     # https://stackoverflow.com/questions/26881739/unable-to-get-spring-boot-to-automatically-create-database-schema
-    generate-ddl: false
-    show-sql: true
+    # generate-ddl: false
     hibernate:
-      dialect: org.hibernate.dialect.PostgreSQL10Dialect
+      # dialect: org.hibernate.dialect.PostgreSQL10Dialect
       ddl-auto: create
       # naming_strategy: TODO
       jdbc:
         lob.non_contextual_creation: true
     properties:
       hibernate:
-        format_sql: false # SQL beautify
+        # show-sql: true
+        format_sql: true
 
   mvc:
     pathmatch:
       # TODO 아래 설정 용도 확인
       matching-strategy: ant_path_matcher
+
+logging.level:
+  org.hibernate.SQL: debug
+  # org.hibernate.SQL: trace  # parameter binding 정보까지 볼 수 있는 옵션 (필요에 따라 사용)
+
+
+

@@ -17,7 +17,7 @@ public class Group {
 
     @Id
     @Column(name = "group_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long groupId;
 
     @Column(name = "group_name", nullable = false)
