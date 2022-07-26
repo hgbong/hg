@@ -1,6 +1,6 @@
 package com.example.hg.repository.lecture;
 
-import com.example.hg.model.member.Member;
+import com.example.hg.model.lecture.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

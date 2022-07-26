@@ -1,6 +1,6 @@
 package com.example.hg.repository.lecture;
 
-import com.example.hg.model.member.Member;
+import com.example.hg.model.lecture.Member;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
