@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 // @RunWith(SpringRunner.class)  // junit5 부터는 사용하지 않음
@@ -30,4 +32,26 @@ class MemberJpaRepositoryTest {
         assertThat(findMember).isEqualTo(member);
     }
 
+    @Test
+    public void testFindByUsernameAndAgeGreaterThan() {
+
+        Member m1 = new Member("name1", 20, null);
+        Member m2 = new Member("name2", 25, null);
+        Member m3 = new Member("name3", 30, null);
+
+        memberJpaRepository.save(m1);
+        memberJpaRepository.save(m2);
+        memberJpaRepository.save(m3);
+
+
+        List<Member> result = memberJpaRepository.findByUsernameAndAgeGreaterThan("name2", 20);
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getUsername()).isEqualTo("name2");
+
+    }
+
+    @Test
+    public void testFindByNamedQuery() {
+        List<Member> testusername = memberJpaRepository.findByUsernameUsingNamedQuery("testusername");
+    }
 }

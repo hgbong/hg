@@ -13,7 +13,7 @@ spring:
     # password: "dlatl#00"
     username: sa
     password:
-    driver-class-name: org.h2.Driver
+    driver-class-name: org.h2.Driver # C:\Program Files (x86)\H2\bin\h2.bat
     platform: postgres
 
 
@@ -29,8 +29,8 @@ spring:
         lob.non_contextual_creation: true
     properties:
       hibernate:
-        # show-sql: true
-        format_sql: true
+      # show-sql: true
+      # format_sql: true
 
   mvc:
     pathmatch:
